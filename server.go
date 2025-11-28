@@ -156,6 +156,9 @@ func (s *Io) FiberRoute(router fiber.Router) {
 			return c.Next()
 		} else if strings.HasPrefix(c.Path(), "/socket.io/") {
 			fileName := strings.Replace(c.Path(), "/socket.io/", "", 1)
+			if fileName == "" {
+				return c.Next()
+			}
 			return filesystem.SendFile(c, http.FS(clientDistFs), fileName)
 		}
 		return fiber.ErrUpgradeRequired
